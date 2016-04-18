@@ -93,7 +93,11 @@ public class Main extends Application {
 			imageView.setViewport(new Rectangle2D(newMinX, newMinY, newWidth, newHeight));
 		});
 
+		Timer timer = new Timer();
+		timer.start();
 		fractal(writer, 500);
+		timer.stop();
+		System.out.println(timer);
 
 		Pane container = new Pane(imageView);
 		container.setPrefSize(950, 600);
@@ -201,6 +205,34 @@ public class Main extends Application {
 				}
 				writer.setColor(xCanvas, yCanvas, color);
 			}
+		}
+	}
+
+	private class Timer {
+		private long startTime;
+		private long endTime;
+		private boolean running = false;
+		private boolean hasTime = false;
+
+		void start() {
+			if(!running) {
+				running = true;
+				startTime = System.nanoTime();
+			}
+		}
+		void stop() {
+			if(running) {
+				endTime = System.nanoTime();
+				running = false;
+				hasTime = true;
+			}
+		}
+		@Override
+		public String toString() {
+			if(hasTime) {
+				long result = ( endTime - startTime ) / 1000000;
+				return "" + result + " ms";
+			} else return "";
 		}
 	}
 }
